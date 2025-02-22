@@ -1,9 +1,11 @@
 ﻿IConfigurationRoot config = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")}.json", true, true)
     .Build();
 int port = config.GetValue<int?>("Port") ?? 80;
 string contentDirectory = config.GetValue<string>("Directory") ?? Directory.GetCurrentDirectory();
+Console.WriteLine($"Port: {port}. Directory: {contentDirectory}");
 
 TcpListener listener = new TcpListener(IPAddress.Any, port);
 listener.Start();
